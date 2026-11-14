@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import PostCard from '../components/PostCard.astro';
+import EmptyState from '../components/EmptyState.astro';
+
+const posts = (await getCollection('blog', (p) => !p.data.draft && p.data.tags.includes('mathematics'))).sort((a, b) => +b.data.date - +a.data.date);
+const prep = [
+  ['AMC 10/12', 'Building speed and accuracy on the contest format through past problems.'],
+  ['AIME preparation', 'Working toward the deeper multi-step problems in number theory, combinatorics, geometry and algebra.'],
+  ['Problem-solving practice', 'Writing out full solutions and revisiting mistakes to understand why they happened.'],
+];
+---
+<BaseLayout title="Mathematics & Competitions" description="Mathematical exploration and competition preparation by Arjun Yadav.">
+  <PageHeader eyebrow="Mathematics" title="Mathematics & Competitions" intro="How I practice, what I'm preparing for, and problems worth writing up." />
+  <div class="container-x space-y-12">
+    <section>
+      <h2 class="font-serif text-2xl font-semibold mb-4">Preparation</h2>
+      <div class="grid gap-4 md:grid-cols-3">
+        {prep.map(([t, d]) => <div class="card p-5"><h3 class="font-semibold">{t}</h3><p class="mt-1 text-sm text-muted">{d}</p></div>)}
+      </div>
+      <p class="mt-4 text-sm text-muted">Competition results and qualifications are listed on the Achievements page only once verified.</p>
+    </section>
+    <section>
+      <h2 class="font-serif text-2xl font-semibold mb-2">Problems & discoveries</h2>
+      {posts.length === 0 ? <EmptyState title="No math write-ups yet" hint="Add a post tagged “mathematics” in src/content/blog/ and it shows up here." /> : posts.map((p) => <PostCard post={p} />)}
+    </section>
+  </div>
+</BaseLayout>

@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ResearchCard from '../components/ResearchCard.astro';
+import EmptyState from '../components/EmptyState.astro';
+
+const entries = (await getCollection('research')).sort((a, b) => +(b.data.date ?? 0) - +(a.data.date ?? 0));
+const categories = ['Physics', 'Astronomy', 'Computational Science', 'Mathematics', 'Artificial Intelligence'] as const;
+---
+<BaseLayout title="Research & Exploration" description="Independent scientific investigations by Arjun Yadav.">
+  <PageHeader eyebrow="Research" title="Research & Exploration" intro="Independent investigations in physics, astronomy, computational science, mathematics, and AI. I only list work that actually exists, with its real status." />
+  <div class="container-x space-y-6">
+    {entries.length === 0 ? (
+      <EmptyState title="Research is in the works" hint="No projects are published yet. When I finish a first investigation, its question, methods, results and code will appear here.">
+        <ul class="mt-5 flex flex-wrap justify-center gap-2">{categories.map((c) => <li class="tag">{c}</li>)}</ul>
+      </EmptyState>
+    ) : (
+      entries.map((e) => <ResearchCard entry={e} />)
+    )}
+  </div>
+</BaseLayout>

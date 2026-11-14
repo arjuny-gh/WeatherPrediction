@@ -1,0 +1,70 @@
+---
+import { getCollection } from 'astro:content';
+import { ArrowRight, Download } from '@lucide/astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroBackground from '../components/HeroBackground.astro';
+import ProfilePhoto from '../components/ProfilePhoto.astro';
+import Icons from '../components/Icons.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import PostCard from '../components/PostCard.astro';
+import GitHubActivity from '../components/GitHubActivity.astro';
+import { site, url } from '../lib/site';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const featured = projects.find((p) => p.data.featured) ?? projects[0];
+const posts = (await getCollection('blog', (p) => !p.data.draft)).sort((a, b) => +b.data.date - +a.data.date).slice(0, 3);
+---
+<BaseLayout>
+  <section class="relative">
+    <HeroBackground />
+    <div class="container-x grid gap-10 py-16 sm:py-24 md:grid-cols-[1fr_auto] md:items-center">
+      <div class="reveal">
+        <h1 class="font-serif text-5xl sm:text-6xl font-semibold tracking-tight">Hi, I'm Arjun<span class="text-accent">.</span></h1>
+        <p class="mt-3 text-lg sm:text-xl font-medium text-accent">{site.tagline}</p>
+        <p class="mt-6 max-w-xl text-lg text-muted">
+          I'm a high school student who loves exploring mathematics, physics, and computer science. Whether I'm solving challenging problems, learning about the universe, writing code, or training in the pool, I'm driven by curiosity and the desire to keep improving.
+        </p>
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a href="#work" class="btn btn-primary">Explore My Work <ArrowRight class="size-4" aria-hidden="true" /></a>
+          {site.github && <a href={site.github} class="btn btn-ghost" rel="noopener"><Icons name="github" class="size-4" /> GitHub</a>}
+          {site.linkedin && <a href={site.linkedin} class="btn btn-ghost" rel="noopener"><Icons name="linkedin" class="size-4" /> LinkedIn</a>}
+          {site.resumeAvailable && <a href={url('/resume.pdf')} class="btn btn-ghost"><Download class="size-4" aria-hidden="true" /> Resume</a>}
+        </div>
+      </div>
+      <div class="w-48 sm:w-60 md:w-72 reveal"><ProfilePhoto class="w-full" /></div>
+    </div>
+  </section>
+
+  <section id="work" class="container-x pt-8">
+    <div class="flex items-end justify-between mb-6">
+      <h2 class="font-serif text-3xl font-semibold">Featured project</h2>
+      <a class="text-sm font-medium text-accent hover:underline" href={url('/projects')}>All projects →</a>
+    </div>
+    {featured && <ProjectCard project={featured} featured />}
+  </section>
+
+  <section class="container-x mt-20">
+    <h2 class="font-serif text-3xl font-semibold mb-6">Explore</h2>
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {[
+        ['Research', 'Independent investigations', '/research'],
+        ['Mathematics', 'Problems & competition prep', '/math'],
+        ['Writing', 'Notes & Ideas', '/writing'],
+        ['Swimming', 'Training & personal bests', '/swimming'],
+      ].map(([t, d, h]) => (
+        <a href={url(h)} class="card p-5 hover:border-accent transition-colors">
+          <p class="font-serif text-xl font-semibold">{t}</p><p class="mt-1 text-sm text-muted">{d}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  {posts.length > 0 && (
+    <section class="container-x mt-20">
+      <div class="flex items-end justify-between"><h2 class="font-serif text-3xl font-semibold">Latest notes</h2><a class="text-sm font-medium text-accent hover:underline" href={url('/writing')}>Archive →</a></div>
+      <div class="mt-2">{posts.map((post) => <PostCard post={post} />)}</div>
+    </section>
+  )}
+
+  <GitHubActivity />
+</BaseLayout>

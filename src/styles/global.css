@@ -1,0 +1,70 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+@import 'katex/dist/katex.min.css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --bg: #ffffff;
+  --surface: #f5f7fb;
+  --fg: #0f172a;
+  --muted: #475569;
+  --line: #e2e8f0;
+  --accent: #1d5fe0;
+  --accent-soft: #e8f0ff;
+  color-scheme: light;
+}
+.dark {
+  --bg: #0a1020;
+  --surface: #111a2e;
+  --fg: #e8eefc;
+  --muted: #9aa8c2;
+  --line: #1e2a44;
+  --accent: #5a95ff;
+  --accent-soft: #14233f;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { animation: none !important; transition: none !important; } }
+
+body { background: var(--bg); color: var(--fg); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+.container-x { max-width: 68rem; margin-inline: auto; padding-inline: 1.25rem; }
+
+/* Reusable bits */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 1rem; }
+.btn { display: inline-flex; align-items: center; gap: .5rem; padding: .65rem 1.1rem; border-radius: .6rem; font-weight: 600; font-size: .95rem; transition: transform .15s, background .15s; }
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-ghost { border: 1px solid var(--line); color: var(--fg); }
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+.tag { display: inline-block; font-size: .75rem; padding: .15rem .6rem; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+.reveal { animation: rise .6s ease both; }
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* Article typography */
+.prose { --tw-prose-body: var(--fg); --tw-prose-headings: var(--fg); --tw-prose-links: var(--accent); --tw-prose-bold: var(--fg); --tw-prose-code: var(--fg); --tw-prose-quotes: var(--fg); --tw-prose-quote-borders: var(--accent); --tw-prose-hr: var(--line); --tw-prose-th-borders: var(--line); --tw-prose-td-borders: var(--line); --tw-prose-bullets: var(--muted); --tw-prose-counters: var(--muted); max-width: 70ch; }
+.prose pre { border: 1px solid var(--line); }
+.prose :not(pre) > code { background: var(--accent-soft); padding: .1rem .35rem; border-radius: .3rem; font-weight: 500; }
+.prose :not(pre) > code::before, .prose :not(pre) > code::after { content: none; }
+.katex-display { overflow-x: auto; overflow-y: hidden; padding: .25rem 0; }
+
+/* Shiki dual theme */
+.astro-code, .astro-code span { color: var(--shiki-light); background-color: var(--shiki-light-bg); }
+.dark .astro-code, .dark .astro-code span { color: var(--shiki-dark) !important; background-color: var(--shiki-dark-bg) !important; }

@@ -1,0 +1,11 @@
+---
+import { Image } from 'astro:assets';
+import fallback from '../assets/profile.svg';
+
+// Drop a photo named profile.jpg / .jpeg / .png / .webp into src/assets/ — it is picked up automatically.
+const found = import.meta.glob<{ default: ImageMetadata }>('../assets/profile.{jpg,jpeg,png,webp}', { eager: true });
+const photo = Object.values(found)[0]?.default ?? fallback;
+interface Props { class?: string }
+const { class: cls = '' } = Astro.props;
+---
+<Image src={photo} alt="Portrait of Arjun Yadav" width={480} height={480} loading="eager" class:list={['rounded-2xl object-cover aspect-square border border-line', cls]} />

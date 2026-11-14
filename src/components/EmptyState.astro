@@ -1,0 +1,12 @@
+---
+interface Props { title: string; hint?: string }
+const { title, hint } = Astro.props;
+---
+<div class="card border-dashed p-10 text-center">
+  <svg class="mx-auto mb-4 size-12 text-accent/70" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+    <circle cx="24" cy="24" r="6"/><ellipse cx="24" cy="24" rx="20" ry="8"/><ellipse cx="24" cy="24" rx="20" ry="8" transform="rotate(60 24 24)"/><ellipse cx="24" cy="24" rx="20" ry="8" transform="rotate(120 24 24)"/>
+  </svg>
+  <p class="font-serif text-xl">{title}</p>
+  {hint && <p class="mt-2 text-muted max-w-md mx-auto">{hint}</p>}
+  <slot />
+</div>

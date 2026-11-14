@@ -1,0 +1,68 @@
+---
+import { Menu, X, Sun, Moon } from '@lucide/astro';
+import { nav, url } from '../lib/site';
+
+const path = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/';
+const isActive = (href: string) => (href === '/' ? path === '/' : path === href || path.startsWith(href + '/'));
+---
+
+<header class="sticky top-0 z-50 border-b border-line bg-bg/85 backdrop-blur">
+  <nav class="container-x flex h-16 items-center justify-between" aria-label="Main">
+    <a href={url('/')} class="font-serif text-xl font-semibold tracking-tight">Arjun<span class="text-accent">.</span></a>
+
+    <ul class="hidden md:flex items-center gap-1">
+      {nav.map((item) => (
+        <li>
+          <a
+            href={url(item.href)}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+            class:list={['px-3 py-2 rounded-md text-sm transition-colors hover:text-accent', isActive(item.href) ? 'text-accent font-semibold' : 'text-muted']}
+          >{item.label}</a>
+        </li>
+      ))}
+    </ul>
+
+    <div class="flex items-center gap-1">
+      <button id="theme-toggle" type="button" class="p-2 rounded-md text-muted hover:text-accent" aria-label="Toggle dark mode">
+        <Sun class="size-5 hidden dark:block" aria-hidden="true" />
+        <Moon class="size-5 dark:hidden" aria-hidden="true" />
+      </button>
+      <button id="menu-toggle" type="button" class="md:hidden p-2 rounded-md text-muted hover:text-accent" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+        <Menu class="size-5 menu-open" aria-hidden="true" />
+        <X class="size-5 menu-close hidden" aria-hidden="true" />
+      </button>
+    </div>
+  </nav>
+
+  <div id="mobile-menu" class="md:hidden hidden border-t border-line bg-bg">
+    <ul class="container-x py-2">
+      {nav.map((item) => (
+        <li>
+          <a href={url(item.href)} aria-current={isActive(item.href) ? 'page' : undefined}
+            class:list={['block py-3 border-b border-line/60 last:border-0', isActive(item.href) ? 'text-accent font-semibold' : 'text-fg']}>{item.label}</a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</header>
+
+<script>
+  const root = document.documentElement;
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    const dark = root.classList.toggle('dark');
+    try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch {}
+  });
+
+  const btn = document.getElementById('menu-toggle')!;
+  const menu = document.getElementById('mobile-menu')!;
+  const setOpen = (open: boolean) => {
+    menu.classList.toggle('hidden', !open);
+    btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    btn.querySelector('.menu-open')?.classList.toggle('hidden', open);
+    btn.querySelector('.menu-close')?.classList.toggle('hidden', !open);
+  };
+  btn.addEventListener('click', () => setOpen(menu.classList.contains('hidden')));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
+  menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+</script>

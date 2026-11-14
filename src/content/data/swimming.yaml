@@ -1,0 +1,9 @@
+# Personal bests. Fill in `time` (e.g. "28.45" or "1:02.31") and `date` when confirmed.
+# course: SCY (short course yards) | SCM (short course meters) | LCM (long course meters)
+# Add or remove events freely. Leave time as null to show "—".
+- { id: 50-free,  event: "50 Free",  course: SCY, time: null, date: null }
+- { id: 100-free, event: "100 Free", course: SCY, time: null, date: null }
+- { id: 200-free, event: "200 Free", course: SCY, time: null, date: null }
+- { id: 100-back, event: "100 Back", course: SCY, time: null, date: null }
+- { id: 100-breast, event: "100 Breast", course: SCY, time: null, date: null }
+- { id: 100-fly,  event: "100 Fly",  course: SCY, time: null, date: null }

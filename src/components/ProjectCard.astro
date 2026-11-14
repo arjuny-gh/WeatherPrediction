@@ -1,0 +1,29 @@
+---
+import { Image } from 'astro:assets';
+import { ExternalLink } from '@lucide/astro';
+import type { CollectionEntry } from 'astro:content';
+import Icons from './Icons.astro';
+import placeholder from '../assets/placeholders/project.svg';
+
+interface Props { project: CollectionEntry<'projects'>; featured?: boolean }
+const { project, featured = false } = Astro.props;
+const d = project.data;
+---
+<article class:list={['card overflow-hidden flex flex-col', featured && 'md:flex-row']}>
+  <div class:list={['bg-bg', featured && 'md:w-1/2']}>
+    <Image src={d.image ?? placeholder} alt={d.image ? `Screenshot of ${d.title}` : ''} width={800} loading="lazy" decoding="async" class="w-full h-full object-cover aspect-video" />
+  </div>
+  <div class="p-6 flex flex-col gap-3 flex-1">
+    <div class="flex items-start justify-between gap-3">
+      <h3 class="font-serif text-xl font-semibold">{d.title}</h3>
+      {d.placeholder && <span class="tag whitespace-nowrap">Sample — replace</span>}
+    </div>
+    <p class="text-muted">{d.description}</p>
+    {d.tech.length > 0 && <ul class="flex flex-wrap gap-2" aria-label="Technologies">{d.tech.map((t) => <li class="tag">{t}</li>)}</ul>}
+    {d.lessons && <p class="text-sm"><strong>Lessons learned:</strong> <span class="text-muted">{d.lessons}</span></p>}
+    <div class="mt-auto pt-2 flex flex-wrap gap-4 text-sm font-medium">
+      {d.github && <a class="inline-flex items-center gap-1.5 text-accent hover:underline" href={d.github} rel="noopener"><Icons name="github" class="size-4" /> Code</a>}
+      {d.demo && <a class="inline-flex items-center gap-1.5 text-accent hover:underline" href={d.demo} rel="noopener"><ExternalLink class="size-4" aria-hidden="true" /> Live demo</a>}
+    </div>
+  </div>
+</article>

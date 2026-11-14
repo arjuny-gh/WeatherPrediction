@@ -1,0 +1,30 @@
+---
+import { site } from '../lib/site';
+---
+{site.githubUser && (
+  <section class="container-x mt-20" id="github-activity" data-user={site.githubUser} aria-labelledby="gh-h">
+    <h2 id="gh-h" class="font-serif text-2xl font-semibold">Recent GitHub activity</h2>
+    <p class="text-sm text-muted mt-1">Loaded live from GitHub's public API — no keys required.</p>
+    <ul id="gh-list" class="mt-4 card divide-y divide-line text-sm"><li class="p-4 text-muted">Loading…</li></ul>
+  </section>
+)}
+
+<script>
+  const root = document.getElementById('github-activity');
+  if (root) {
+    const list = document.getElementById('gh-list')!;
+    const esc = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+    fetch(`https://api.github.com/users/${root.dataset.user}/events/public?per_page=30`)
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((events: any[]) => {
+        const pushes = events.filter((e) => e.type === 'PushEvent').slice(0, 5);
+        if (!pushes.length) { list.innerHTML = '<li class="p-4 text-muted">No recent public commits yet.</li>'; return; }
+        list.innerHTML = pushes.map((e) => {
+          const msg = esc(e.payload.commits?.[0]?.message?.split('\n')[0] ?? 'Pushed commits');
+          const repo = esc(e.repo.name);
+          return `<li class="p-4 flex flex-wrap justify-between gap-2"><span><a class="text-accent hover:underline" href="https://github.com/${repo}">${repo}</a> — ${msg}</span><time class="text-muted">${new Date(e.created_at).toLocaleDateString()}</time></li>`;
+        }).join('');
+      })
+      .catch(() => { root.hidden = true; });
+  }
+</script>

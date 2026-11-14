@@ -1,0 +1,24 @@
+---
+import Icons from './Icons.astro';
+import { Mail } from '@lucide/astro';
+import { site, url } from '../lib/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-line mt-20">
+  <div class="container-x py-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+    <div class="text-sm text-muted">
+      <p>© {year} {site.name}. All rights reserved.</p>
+      <p class="mt-1">
+        <a class="hover:text-accent" href={url('/math')}>Mathematics</a> ·
+        <a class="hover:text-accent" href={url('/contact')}>Contact</a> ·
+        <a class="hover:text-accent" href={url('/sitemap-index.xml')}>Sitemap</a>
+      </p>
+    </div>
+    <ul class="flex items-center gap-4 text-muted">
+      {site.github && <li><a class="hover:text-accent" href={site.github} rel="noopener" aria-label="GitHub"><Icons name="github" /></a></li>}
+      {site.linkedin && <li><a class="hover:text-accent" href={site.linkedin} rel="noopener" aria-label="LinkedIn"><Icons name="linkedin" /></a></li>}
+      {site.email && <li><a class="hover:text-accent" href={`mailto:${site.email}`} aria-label="Email"><Mail class="size-5" aria-hidden="true" /></a></li>}
+    </ul>
+  </div>
+</footer>

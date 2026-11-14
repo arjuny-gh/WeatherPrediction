@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import { ExternalLink } from '@lucide/astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import EmptyState from '../components/EmptyState.astro';
+
+const all = (await getCollection('achievements')).sort((a, b) => b.data.date.localeCompare(a.data.date));
+const categories = [
+  'Academic competitions', 'Science and engineering', 'Mathematics', 'Swimming', 'Leadership and community', 'Other activities',
+] as const;
+const groups = categories.map((c) => [c, all.filter((a) => a.data.category === c)] as const).filter(([, items]) => items.length);
+---
+<BaseLayout title="Achievements & Activities" description="Verified achievements and activities of Arjun Yadav.">
+  <PageHeader eyebrow="Achievements" title="Achievements & Activities" intro="Only verified entries appear here, each with its date, organization and — where possible — a link to confirm it." />
+  <div class="container-x space-y-10">
+    {groups.length === 0 ? (
+      <EmptyState title="Nothing listed yet" hint="Entries appear once they're verified. Add them in src/content/data/achievements.yaml." />
+    ) : groups.map(([cat, items]) => (
+      <section>
+        <h2 class="font-serif text-2xl font-semibold mb-4">{cat}</h2>
+        <ol class="relative border-l border-line ml-2 space-y-6">
+          {items.map((a) => (
+            <li class="pl-6 relative">
+              <span class="absolute -left-[5px] top-2 size-2.5 rounded-full bg-accent" aria-hidden="true"></span>
+              <p class="text-sm text-muted">{a.data.date} · {a.data.organization}</p>
+              <p class="font-medium">{a.data.title}</p>
+              {a.data.verification && <a class="inline-flex items-center gap-1 text-sm text-accent hover:underline" href={a.data.verification} rel="noopener"><ExternalLink class="size-3.5" aria-hidden="true" /> Verify</a>}
+            </li>
+          ))}
+        </ol>
+      </section>
+    ))}
+  </div>
+</BaseLayout>

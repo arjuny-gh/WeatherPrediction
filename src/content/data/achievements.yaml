@@ -1,0 +1,12 @@
+# Add one entry per verified achievement. Do not add anything you cannot verify.
+# category must be one of:
+#   Academic competitions | Science and engineering | Mathematics | Swimming
+#   Leadership and community | Other activities
+#
+# - id: amc-example          # unique, lowercase, no spaces
+#   date: "2026-02"          # year or year-month
+#   category: Mathematics
+#   organization: Organization name
+#   title: What happened (factual)
+#   verification: https://link-that-confirms-it   # optional
+[]

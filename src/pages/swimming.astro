@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import EmptyState from '../components/EmptyState.astro';
+
+const pbs = await getCollection('swimming');
+const milestones = (await getCollection('milestones')).sort((a, b) => b.data.date.localeCompare(a.data.date));
+const hasAnyTime = pbs.some((p) => p.data.time);
+---
+<BaseLayout title="Swimming" description="Arjun Yadav's competitive swimming with Wave Aquatics.">
+  <PageHeader eyebrow="Swimming" title="In the pool" intro="I'm a competitive swimmer with Wave Aquatics." />
+  <div class="container-x grid gap-10 lg:grid-cols-2">
+    <div class="prose dark:prose-invert">
+      <h2>Why it matters to me</h2>
+      <p>Swimming is where I practice discipline. Improvement comes from consistency and attention to detail — the same habits that help with math and research.</p>
+      <h2>Lessons from athletics</h2>
+      <ul>
+        <li>Small, repeated effort beats occasional heroics.</li>
+        <li>A bad race is data, not a verdict.</li>
+        <li>Being part of a team makes everyone faster.</li>
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="font-serif text-2xl font-semibold mb-4">Personal bests</h2>
+      <div class="card overflow-x-auto">
+        <table class="w-full text-sm">
+          <caption class="sr-only">Personal best times</caption>
+          <thead class="text-left text-muted"><tr><th scope="col" class="p-3">Event</th><th scope="col" class="p-3">Course</th><th scope="col" class="p-3">Time</th><th scope="col" class="p-3">Date</th></tr></thead>
+          <tbody>
+            {pbs.map((p) => (
+              <tr class="border-t border-line">
+                <th scope="row" class="p-3 text-left font-medium">{p.data.event}</th>
+                <td class="p-3">{p.data.course}</td>
+                <td class="p-3 font-mono">{p.data.time ?? '—'}</td>
+                <td class="p-3 text-muted">{p.data.date ?? '—'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {!hasAnyTime && <p class="mt-2 text-sm text-muted">Times will be added as they're confirmed.</p>}
+    </div>
+  </div>
+
+  <div class="container-x mt-12">
+    <h2 class="font-serif text-2xl font-semibold mb-4">Milestones</h2>
+    {milestones.length === 0 ? <EmptyState title="Milestones will appear here" hint="Add them in src/content/data/milestones.yaml." /> : (
+      <ol class="border-l border-line ml-2 space-y-5">
+        {milestones.map((m) => <li class="pl-6"><p class="text-sm text-muted">{m.data.date}</p><p>{m.data.text}</p></li>)}
+      </ol>
+    )}
+  </div>
+</BaseLayout>

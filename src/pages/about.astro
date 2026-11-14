@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ProfilePhoto from '../components/ProfilePhoto.astro';
+import { site } from '../lib/site';
+// TODO (Arjun): This is a first draft built only from what you've shared. Make it yours —
+// add specific moments, books, problems, or experiments that shaped you.
+---
+<BaseLayout title="About" description="Who Arjun Yadav is: interests in physics, math, computer science and swimming.">
+  <PageHeader eyebrow="About" title="A little about me" intro={`${site.grade} at ${site.school}.`} />
+  <div class="container-x grid gap-10 md:grid-cols-[1fr_16rem]">
+    <div class="prose dark:prose-invert max-w-none md:max-w-[65ch]">
+      <h2>Physics & astronomy</h2>
+      <p>I like questions that start with "wait, why does that happen?" The night sky is full of them — how stars form, what holds galaxies together, how we know anything about objects we can never visit. I'm learning the physics behind these ideas and want to turn that curiosity into real investigations.</p>
+      <h2>Math and problem-solving</h2>
+      <p>Math is where I practice thinking carefully. A hard problem rarely gives in on the first try, and I've learned to enjoy that struggle. I'm preparing for contests like the AMC 10/12 and AIME, and I write up problems that taught me something.</p>
+      <h2>Code and AI</h2>
+      <p>Programming lets me test an idea instead of just imagining it. I build with Python and the web, and I'm curious about how machine learning can help answer scientific questions — and honest about where it falls short.</p>
+      <h2>In the pool</h2>
+      <p>I swim competitively with Wave Aquatics. Swimming taught me that progress comes from showing up consistently, paying attention to small details, and learning from races that don't go my way.</p>
+      <h2>How I learn</h2>
+      <p>I try things, get them wrong, and write down what I figured out. This site is where that work lives — and it will keep changing as I do. Long term, I'm drawn to aerospace engineering, artificial intelligence, and computational physics.</p>
+    </div>
+    <aside class="space-y-4">
+      <ProfilePhoto class="w-full" />
+      <dl class="card p-4 text-sm space-y-2">
+        <div><dt class="text-muted">School</dt><dd>{site.school}</dd></div>
+        <div><dt class="text-muted">Grade</dt><dd>{site.grade}</dd></div>
+        <div><dt class="text-muted">Interests</dt><dd>Math · Physics · CS · Astronomy · Swimming</dd></div>
+      </dl>
+    </aside>
+  </div>
+</BaseLayout>
